@@ -28,6 +28,7 @@ import net.ccbluex.liquidbounce.utils.aiming.RotationManager;
 import net.ccbluex.liquidbounce.utils.client.SilentHotbar;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -44,7 +45,13 @@ public abstract class MixinPlayerEntity extends MixinLivingEntity {
     @Final
     public PlayerInventory inventory;
 
-    /**
+    @Shadow public abstract PlayerInventory getInventory();
+
+    @Shadow protected HungerManager hungerManager;
+
+    @Shadow public float experienceProgress;
+
+  /**
      * Hook player stride event
      */
     @ModifyVariable(

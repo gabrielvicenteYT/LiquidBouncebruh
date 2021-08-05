@@ -29,6 +29,7 @@ import net.minecraft.client.util.InputUtil
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
 import net.minecraft.entity.MovementType
+import net.minecraft.item.ItemStack
 import net.minecraft.network.Packet
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
@@ -114,6 +115,12 @@ class ChatSendEvent(val message: String) : CancellableEvent()
 @Nameable("useCooldown")
 class UseCooldownEvent(var cooldown: Int) : Event()
 
+@Nameable("changeSlot")
+class ChangeSlotEvent(var slot: Int): Event()
+
+@Nameable("changeOffHand")
+class ChangeOffHandEvent(var itemStack: ItemStack?): Event()
+
 // World events
 
 @Nameable("blockShape")
@@ -164,6 +171,15 @@ class PlayerSafeWalkEvent(var isSafeWalk: Boolean = false) : Event()
 
 @Nameable("cancelBlockBreaking")
 class CancelBlockBreakingEvent : CancellableEvent()
+
+@Nameable("playerHealthChange")
+class PlayerHealthChangeEvent(val health: Float, val maxHealth: Float) : Event()
+
+@Nameable("playerFoodLevelChange")
+class PlayerFoodLevelChangeEvent(val foodLevel: Float) : Event()
+
+@Nameable("playerExperienceProgressChange")
+class PlayerExperienceProgressChangeEvent(val experienceProgress: Float) : Event()
 
 // Network events
 

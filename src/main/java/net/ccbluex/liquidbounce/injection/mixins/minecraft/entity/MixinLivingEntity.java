@@ -60,6 +60,12 @@ public abstract class MixinLivingEntity extends MixinEntity {
     @Shadow
     private int jumpingCooldown;
 
+    @Shadow public abstract ItemStack getOffHandStack();
+
+    @Shadow public abstract float getHealth();
+
+    @Shadow public abstract float getMaxHealth();
+
     /**
      * Hook anti levitation module
      */

@@ -157,6 +157,9 @@ object UltralightEngine {
     fun newOverlayView() =
         View(RenderLayer.OVERLAY_LAYER, newViewRenderer()).also { views += it }
 
+    fun newInGameView() =
+        View(RenderLayer.IN_GAME_LAYER, newViewRenderer()).also { views += it }
+
     fun newScreenView(screen: Screen, adaptedScreen: Screen? = null, parentScreen: Screen? = null) =
         ScreenView(newViewRenderer(), screen, adaptedScreen, parentScreen).also { views += it }
 
@@ -175,5 +178,5 @@ object UltralightEngine {
 }
 
 enum class RenderLayer {
-    OVERLAY_LAYER, SCREEN_LAYER, SPLASH_LAYER
+    OVERLAY_LAYER, SCREEN_LAYER, IN_GAME_LAYER, SPLASH_LAYER
 }

@@ -33,6 +33,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.MovementType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
@@ -54,12 +55,55 @@ public abstract class MixinClientPlayerEntity extends MixinPlayerEntity {
     @Shadow
     public Input input;
 
+    private int lastKnownSlot;
+
+    private ItemStack lastKnownOffHandStack;
+
+    private float lastKnownHealth;
+    private float lastKnownMaxHealth;
+
+    private float lastKnownFoodLevel;
+    private float lastKnownExperienceProgress;
+
     /**
      * Hook entity tick event
      */
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tick()V", shift = At.Shift.AFTER))
     private void hookTickEvent(CallbackInfo callbackInfo) {
         EventManager.INSTANCE.callEvent(new PlayerTickEvent());
+
+        final int selectedSlot = this.getInventory().selectedSlot;
+        final ItemStack offHandStack = this.getOffHandStack();
+        final float health = this.getHealth();
+        final float maxHealth = this.getMaxHealth();
+        final float foodLevel = this.hungerManager.getFoodLevel();
+        final float experienceProgress = this.experienceProgress;
+
+        if(lastKnownSlot != selectedSlot) {
+            lastKnownSlot = selectedSlot;
+            EventManager.INSTANCE.callEvent(new ChangeSlotEvent(selectedSlot));
+        }
+
+        if(lastKnownOffHandStack != offHandStack) {
+            lastKnownOffHandStack = offHandStack;
+            EventManager.INSTANCE.callEvent(new ChangeOffHandEvent(offHandStack));
+        }
+
+        if(lastKnownHealth != health || lastKnownMaxHealth != maxHealth) {
+            lastKnownHealth = health;
+            lastKnownMaxHealth = maxHealth;
+            EventManager.INSTANCE.callEvent(new PlayerHealthChangeEvent(health, maxHealth));
+        }
+
+        if(lastKnownFoodLevel != foodLevel) {
+            lastKnownFoodLevel = foodLevel;
+            EventManager.INSTANCE.callEvent(new PlayerFoodLevelChangeEvent(foodLevel));
+        }
+
+        if(lastKnownExperienceProgress != experienceProgress) {
+            lastKnownExperienceProgress = experienceProgress;
+            EventManager.INSTANCE.callEvent(new PlayerExperienceProgressChangeEvent(experienceProgress));
+        }
     }
 
     /**

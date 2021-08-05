@@ -49,7 +49,12 @@ object EventManager {
         ToggleModuleEvent::class,
         NotificationEvent::class,
         ClientChatMessageEvent::class,
-        ClientChatErrorEvent::class
+        ClientChatErrorEvent::class,
+        ChangeSlotEvent::class,
+        ChangeOffHandEvent::class,
+        PlayerHealthChangeEvent::class,
+        PlayerFoodLevelChangeEvent::class,
+        PlayerExperienceProgressChangeEvent::class
     ).map { Pair(it.findAnnotation<Nameable>()!!.name, it) }
 
     init {
